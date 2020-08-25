@@ -20,18 +20,31 @@ namespace Formality.Api.Controllers
             _mediator = mediator;
         }
 
+        /// <summary>
+        ///     Returns all submissions that match a provided query.
+        /// </summary>
+        /// <param name="query">
+        ///     A query with searching parameters.
+        ///     Usage: /api/submissions?{ "keyword": "foo", "maxResults": 10 }
+        /// </param>
+        /// <param name="cancellationToken">A token to stop the current request.</param>
         [HttpGet]
         public async Task<ActionResult<SubmissionListDto[]>> SearchSubmission(
-            string? query = null,
+            SearchSubmissionQuery? query = null,
             CancellationToken cancellationToken = default)
         {
             var result = await _mediator.Send(
-                this.GetQuery<SearchSubmissionQuery>(query),
+                query ?? new SearchSubmissionQuery(),
                 cancellationToken);
 
             return result;
         }
 
+        /// <summary>
+        ///     Returns a submission that matches a provided identifier.
+        /// </summary>
+        /// <param name="id">An identifier of a submission.</param>
+        /// <param name="cancellationToken">A token to stop the current request.</param>
         [HttpGet("{id:int}")]
         public Task<ActionResult<SubmissionListDto>> GetSubmission(
             int id,
@@ -40,11 +53,18 @@ namespace Formality.Api.Controllers
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        ///     Adds a new form submission.
+        /// </summary>
+        /// <param name="command">A command to add a submission.</param>
+        /// <param name="cancellationToken">A token to stop the current request.</param>
         [HttpPost]
-        public async Task<ActionResult<int>> AddSubmission(AddSubmissionCommand command)
+        public async Task<ActionResult<int>> AddSubmission(
+            AddSubmissionCommand command,
+            CancellationToken cancellationToken = default)
         {
-            var id = await _mediator.Send(command);
-            return CreatedAtAction(nameof(GetSubmission), id);
+            var id = await _mediator.Send(command, cancellationToken);
+            return CreatedAtAction(nameof(GetSubmission), new { id }, id);
         }
     }
 }

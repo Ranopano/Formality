@@ -31,6 +31,7 @@ namespace Formality.App.Forms.Queries
         {
             var query = _context.Forms
                 .Include(x => x.Fields)
+                .ThenInclude(x => x.Values)
                 .Where(x => x.Id == request.Id);
 
             var result = await _mapper

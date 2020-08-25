@@ -1,7 +1,7 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
+using Formality.App.Common.Exceptions;
 using Formality.App.Forms.Models;
 using Formality.App.Infrastructure;
 using MediatR;
@@ -29,7 +29,7 @@ namespace Formality.App.Forms.Commands
         {
             if (await _context.Forms.AnyAsync(x => x.Name == request.Name, cancellationToken))
             {
-                throw new InvalidOperationException($@"Form ""{request.Name}"" already exists.");
+                throw new DomainException($@"Form ""{request.Name}"" already exists.");
             }
 
             var form = new Form
@@ -45,7 +45,7 @@ namespace Formality.App.Forms.Commands
         }
     }
 
-    public sealed class CreateFormCommandValidator : AbstractValidator<UpdateFormCommand>
+    public sealed class CreateFormCommandValidator : AbstractValidator<EditFormCommand>
     {
         public CreateFormCommandValidator()
         {

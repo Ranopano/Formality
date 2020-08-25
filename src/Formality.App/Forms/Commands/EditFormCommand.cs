@@ -9,36 +9,38 @@ using Formality.App.Forms.Dto;
 using Formality.App.Forms.Models;
 using Formality.App.Infrastructure;
 using System;
+using Formality.App.Common.Exceptions;
 
 namespace Formality.App.Forms.Commands
 {
-    public sealed class UpdateFormCommand : IRequest
+    public sealed class EditFormCommand : IRequest
     {
         public string Name { get; set; } = string.Empty;
 
         public FormFieldDto[] Fields { get; } = Array.Empty<FormFieldDto>();
     }
 
-    public sealed class UpdateFormCommandHandler : AsyncRequestHandler<UpdateFormCommand>
+    public sealed class EditFormCommandHandler : AsyncRequestHandler<EditFormCommand>
     {
         private readonly AppDbContext _context;
 
-        public UpdateFormCommandHandler(AppDbContext context)
+        public EditFormCommandHandler(AppDbContext context)
         {
             _context = context;
         }
 
         protected async override Task Handle(
-            UpdateFormCommand request,
+            EditFormCommand request,
             CancellationToken cancellationToken)
         {
             var form = await _context.Forms
                 .Include(x => x.Fields.Where(f => !f.Deleted))
+                .ThenInclude(x => x.Values)
                 .FirstOrDefaultAsync(x => x.Name == request.Name, cancellationToken);
 
             if (form == null)
             {
-                throw new InvalidOperationException($@"Form ""{request.Name}"" doesn't exist yet.");
+                throw new DomainException($@"Form ""{request.Name}"" doesn't exist yet.");
             }
 
             foreach (var entity in form.Fields)
@@ -59,7 +61,18 @@ namespace Formality.App.Forms.Commands
                 entity.Placeholder = dto.Placeholder;
                 entity.Type = dto.Type;
 
-                // TODO: save field values
+                entity.Values.Clear();
+
+                foreach (var dtoValue in dto.Values)
+                {
+                    var entityValue = new FormFieldValue
+                    {
+                        Field = entity,
+                        Value = dtoValue.Value,
+                    };
+
+                    entity.Values.Add(entityValue);
+                }
 
                 entities.Add(entity);
             }
@@ -70,12 +83,32 @@ namespace Formality.App.Forms.Commands
         }
     }
 
-    public sealed class UpdateFormCommandValidator : AbstractValidator<UpdateFormCommand>
+    public sealed class UpdateFormCommandValidator : AbstractValidator<EditFormCommand>
     {
         public UpdateFormCommandValidator()
         {
-            RuleFor(x => x.Name).NotEmpty();
-            RuleFor(x => x.Fields).NotEmpty();
+            RuleFor(x => x.Name)
+                .NotEmpty()
+                .MaximumLength(2000);
+
+            RuleFor(x => x.Fields)
+                .NotEmpty();
+
+            RuleForEach(x => x.Fields)
+                .ChildRules(field =>
+                {
+                    field.RuleFor(x => x.Name)
+                        .NotEmpty()
+                        .MaximumLength(2000)
+                        .Matches(@"^[\w\d-]+$");
+
+                    field.RuleFor(x => x.Label)
+                        .NotEmpty()
+                        .MaximumLength(2000);
+
+                    field.RuleFor(x => x.Values)
+                        .NotEmpty();
+                });
         }
     }
 }

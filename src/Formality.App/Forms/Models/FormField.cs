@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Formality.App.Forms.Models
 {
     public class FormField
@@ -15,5 +17,7 @@ namespace Formality.App.Forms.Models
         public FieldType Type { get; set; } = FieldType.Text;
 
         public bool Deleted { get; set; }
+
+        public ICollection<FormFieldValue> Values { get; set; } = new List<FormFieldValue>();
     }
 }

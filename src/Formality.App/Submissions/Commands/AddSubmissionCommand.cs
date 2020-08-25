@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
+using Formality.App.Common.Exceptions;
 using Formality.App.Forms.Models;
 using Formality.App.Forms.Queries;
 using Formality.App.Infrastructure;
@@ -42,7 +43,7 @@ namespace Formality.App.Submissions.Commands
 
             if (form == null)
             {
-                throw new InvalidOperationException(
+                throw new DomainException(
                     $@"Cannot find a form for this submission.");
             }
 

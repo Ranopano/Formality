@@ -1,8 +1,11 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text.Json;
 using AutoMapper;
 using FluentValidation.AspNetCore;
+using Formality.Api.Middleware;
+using Formality.App.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,7 +14,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Formality.App.Infrastructure;
 
 namespace Formality.Api
 {
@@ -33,8 +35,23 @@ namespace Formality.Api
 
             services.AddCors();
 
+            services.AddRouting(options =>
+            {
+                options.AppendTrailingSlash = true;
+                options.LowercaseUrls = true;
+            });
+
             services
-                .AddControllers()
+                .AddControllers(options =>
+                {
+                    options.ModelBinderProviders
+                        .Insert(0, new ModelBinders.SearchQueryModelBinder.Provider());
+                })
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions
+                        .PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                })
                 .AddFluentValidation(options =>
                 {
                     // TODO: use validation behaviour
@@ -51,6 +68,8 @@ namespace Formality.Api
             });
 
             services.AddScoped<AppDbContextSeed>();
+            services.AddScoped<TransactionMiddleware>();
+            services.AddScoped<ExceptionMiddleware>();
 
             services.AddAutoMapper(assembly);
             services.AddMediatR(assembly);
@@ -66,16 +85,9 @@ namespace Formality.Api
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
             app.UseHttpsRedirection();
-
-            var origins = Configuration["ClientAppUrl"];
 
             app.UseRouting();
             app.UseCors(builder =>
@@ -92,6 +104,9 @@ namespace Formality.Api
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{Title} API V1");
             });
+
+            app.UseMiddleware<ExceptionMiddleware>();
+            app.UseMiddleware<TransactionMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,4 +1,5 @@
 using AutoMapper;
+using Formality.App.Common.Dto;
 using Formality.App.Forms.Dto;
 using Formality.App.Forms.Models;
 using Formality.App.Submissions.Dto;
@@ -13,16 +14,16 @@ namespace Formality.App.Infrastructure
             CreateMap<Form, FormDto>()
                 .ForMember(x => x.Fields, x => x.ExplicitExpansion());
 
-            CreateMap<FormField, FormFieldDto>()
-                .ForMember(x => x.Values, x => x.ExplicitExpansion());
+            CreateMap<Form, FormListDto>();
+            CreateMap<Form, NamedEntityDto>();
 
+            CreateMap<FormField, FormFieldDto>();
             CreateMap<FormFieldValue, FormFieldValueDto>();
 
             CreateMap<Submission, SubmissionListDto>()
                 .ForMember(x => x.Values, x => x.ExplicitExpansion());
 
-            CreateMap<SubmissionValue, SubmissionValueDto>()
-                .ForMember(x => x.Field, x => x.ExplicitExpansion());
+            CreateMap<SubmissionValue, SubmissionValueDto>();
         }
     }
 }
