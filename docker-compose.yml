@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  formality.api:
+    image: ${DOCKER_REGISTRY-}formality.api
+    build:
+      context: .
+      dockerfile: src/Formality.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - 5000:80
+
+  formality.client:
+    image: ${DOCKER_REGISTRY-}formality.client
+    build:
+      context: ./src/Formality.Client
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
+    depends_on:
+      - formality.api

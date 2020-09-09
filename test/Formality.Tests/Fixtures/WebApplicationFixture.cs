@@ -36,6 +36,9 @@ namespace Formality.Tests.Fixtures
         {
             var host = base.CreateHost(builder);
 
+            // TODO: proper clean up
+            File.Delete("testdb.sqlite");
+
             host.MigrateDbContext((App.Infrastructure.AppDbContext _, IServiceProvider services) =>
             {
                 var seed = services.GetRequiredService<AppDbContextSeed>();

@@ -4,12 +4,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4C993998-9F67-4B0C-8350-D375E10204F5}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.Build.props = src\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Formality.App", "src\Formality.App\Formality.App.csproj", "{230C580F-6E7D-4BE5-A491-F88783B51A78}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Formality.Api", "src\Formality.Api\Formality.Api.csproj", "{2A506BC7-EBC2-49E5-8E60-B2D0379DFFB6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{90AF4463-536E-4F98-8569-3FC541760615}"
+	ProjectSection(SolutionItems) = preProject
+		test\Directory.Build.props = test\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Formality.Tests", "test\Formality.Tests\Formality.Tests.csproj", "{40E139DA-5444-4D0C-A987-392639780680}"
 EndProject
@@ -23,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Packages.props = Packages.props
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{2B1DEBFC-CC91-4A0D-974C-3A9518B8181F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -70,6 +78,18 @@ Global
 		{40E139DA-5444-4D0C-A987-392639780680}.Release|x64.Build.0 = Release|Any CPU
 		{40E139DA-5444-4D0C-A987-392639780680}.Release|x86.ActiveCfg = Release|Any CPU
 		{40E139DA-5444-4D0C-A987-392639780680}.Release|x86.Build.0 = Release|Any CPU
+		{2B1DEBFC-CC91-4A0D-974C-3A9518B8181F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B1DEBFC-CC91-4A0D-974C-3A9518B8181F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B1DEBFC-CC91-4A0D-974C-3A9518B8181F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2B1DEBFC-CC91-4A0D-974C-3A9518B8181F}.Debug|x64.Build.0 = Debug|Any CPU
+		{2B1DEBFC-CC91-4A0D-974C-3A9518B8181F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2B1DEBFC-CC91-4A0D-974C-3A9518B8181F}.Debug|x86.Build.0 = Debug|Any CPU
+		{2B1DEBFC-CC91-4A0D-974C-3A9518B8181F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B1DEBFC-CC91-4A0D-974C-3A9518B8181F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B1DEBFC-CC91-4A0D-974C-3A9518B8181F}.Release|x64.ActiveCfg = Release|Any CPU
+		{2B1DEBFC-CC91-4A0D-974C-3A9518B8181F}.Release|x64.Build.0 = Release|Any CPU
+		{2B1DEBFC-CC91-4A0D-974C-3A9518B8181F}.Release|x86.ActiveCfg = Release|Any CPU
+		{2B1DEBFC-CC91-4A0D-974C-3A9518B8181F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

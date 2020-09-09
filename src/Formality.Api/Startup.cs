@@ -90,8 +90,6 @@ namespace Formality.Api
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseHttpsRedirection();
-
             app.UseRouting();
             app.UseCors(builder =>
                 builder.SetPreflightMaxAge(TimeSpan.FromHours(1))

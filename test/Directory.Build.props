@@ -3,6 +3,7 @@
   <Import Project="../Directory.Build.props" />
 
   <PropertyGroup>
+    <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <RunAnalyzers>false</RunAnalyzers>
