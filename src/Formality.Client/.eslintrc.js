@@ -14,12 +14,14 @@ module.exports = {
     quotes: ["error", "single"],
     "max-len": ["error", { "code": 100, "tabWidth": 4, "ignoreComments": true }],
     "arrow-parens": ["error", "as-needed"],
+    "arrow-body-style": "off",
     "no-plusplus": "off",
     "import/prefer-default-export": "off",
     "no-useless-constructor": "off",
     "class-methods-use-this": "off",
     "consistent-return": "off",
-    "no-restricted-syntax": "off"
+    "no-restricted-syntax": "off",
+    "no-param-reassign": ["error", { "props": false }]
   },
   overrides: [
     {

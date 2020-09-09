@@ -6,13 +6,12 @@ using AutoMapper;
 using FluentValidation.AspNetCore;
 using Formality.Api.Middleware;
 using Formality.App.Infrastructure;
+using Formality.App.Infrastructure.MediatR;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
 namespace Formality.Api
@@ -49,40 +48,44 @@ namespace Formality.Api
                 })
                 .AddJsonOptions(options =>
                 {
-                    options.JsonSerializerOptions
-                        .PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                    options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 })
                 .AddFluentValidation(options =>
                 {
-                    // TODO: use validation behaviour
+                    options.AutomaticValidationEnabled = false;
                     options.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-                    options.RegisterValidatorsFromAssembly(assembly);
+                    options.RegisterValidatorsFromAssembly(assembly, lifetime: ServiceLifetime.Scoped);
                 });
 
             services.AddDbContextPool<AppDbContext>(options =>
             {
-                options.UseSqlite(Configuration.GetConnectionString("Sqlite"), o =>
+                options.UseSqlite(Configuration.GetConnectionString("Sqlite"), x =>
                 {
-                    o.MigrationsAssembly(assembly.FullName);
+                    x.MigrationsAssembly(assembly.FullName);
                 });
             });
-
-            services.AddScoped<AppDbContextSeed>();
-            services.AddScoped<TransactionMiddleware>();
-            services.AddScoped<ExceptionMiddleware>();
 
             services.AddAutoMapper(assembly);
             services.AddMediatR(assembly);
 
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(x =>
             {
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = $"{Title} API", Version = "v1" });
-                c.DescribeAllParametersInCamelCase();
-                c.IncludeXmlComments(xmlPath);
+                x.SwaggerDoc("v1", new OpenApiInfo { Title = $"{Title} API", Version = "v1" });
+                x.DescribeAllParametersInCamelCase();
+                x.IncludeXmlComments(xmlPath);
             });
+
+            services.AddScoped<AppDbContextSeed>();
+            services.AddScoped<IReadOnlyAppDbContext, AppDbContext>();
+
+            services.AddScoped<TransactionMiddleware>();
+            services.AddScoped<ExceptionMiddleware>();
+
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         }
 
         public void Configure(IApplicationBuilder app)
@@ -100,9 +103,9 @@ namespace Formality.Api
             app.UseAuthorization();
 
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            app.UseSwaggerUI(x =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{Title} API V1");
+                x.SwaggerEndpoint("/swagger/v1/swagger.json", $"{Title} API V1");
             });
 
             app.UseMiddleware<ExceptionMiddleware>();

@@ -20,12 +20,8 @@ export default class App extends Vue {}
 </script>
 
 <style lang="scss">
-.fade-enter-active, .fade-leave-active {
-  transition: all 0.5s;
-  height: auto;
-}
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-  height: 0;
+.form {
+  border: $border-width solid $border-color;
+  border-radius: 5px;
 }
 </style>

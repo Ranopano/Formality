@@ -1,0 +1,20 @@
+{
+  "formId": 1,
+  "values": [
+    {
+      "fieldId": 1,
+      "type": 1,
+      "value": "1"
+    },
+    {
+      "fieldId": 2,
+      "type": 2,
+      "value": "22"
+    },
+    {
+      "fieldId": 3,
+      "type": 5,
+      "value": "3"
+    }
+  ]
+}

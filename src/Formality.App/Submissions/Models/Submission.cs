@@ -9,6 +9,8 @@ namespace Formality.App.Submissions.Models
     {
         public DateTime CreateDateTime { get; set; } = DateTime.UtcNow;
 
+        public int FormId { get; set; }
+
         public Form Form { get; set; } = default!;
 
         public ICollection<SubmissionValue> Values { get; set; } = new List<SubmissionValue>();

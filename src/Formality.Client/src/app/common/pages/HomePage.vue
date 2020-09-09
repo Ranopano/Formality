@@ -3,15 +3,11 @@
     <PageHeader :header="title" description="A dummy project to build web forms and stuff" />
     <div class="row no-gutters">
       <section class="col-sm-9 p-2">
-        <SubmissionList
-          header="Latest submissions"
-          no-items="Nobody here but us chickens, chief."
-        />
+        <SubmissionList header="Latest submissions" />
       </section>
       <section class="col-sm-3 p-2">
-        <h4 class="forms-header">
+        <h4>
           <span>Forms</span>
-          <FormCreateNewButton size="sm" />
         </h4>
         <FormList />
       </section>
@@ -22,25 +18,28 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import FormList from 'app/forms/components/FormList.vue';
-import FormCreateNewButton from 'app/forms/components/FormCreateNewButton.vue';
 import SubmissionList from 'app/submissions/components/SubmissionList.vue';
 import PageHeader from 'app/common/components/headers/PageHeader.vue';
-import { searchForm } from '@/app/forms/store/actions';
-import { searchSubmission } from '@/app/submissions/store/actions';
+import { FormState } from 'app/forms/models';
+import { searchForm } from 'app/forms/store/actions';
+import { searchSubmission } from 'app/submissions/store/actions';
 import { title } from '@/store/getters';
+import { mapGetters } from 'vuex';
 
 @Component({
   components: {
     PageHeader,
     FormList,
-    FormCreateNewButton,
     SubmissionList,
+  },
+  computed: {
+    ...mapGetters([
+      title.name,
+    ]),
   },
 })
 export default class HomePage extends Vue {
-  private get title() {
-    return title(this);
-  }
+  private title!: string;
 
   private async created() {
     const query = {
@@ -51,7 +50,7 @@ export default class HomePage extends Vue {
     };
 
     const tasks = [
-      this.$store.dispatch(searchForm(query)),
+      this.$store.dispatch(searchForm({ ...query, stateId: FormState.Actual })),
       this.$store.dispatch(searchSubmission(query)),
     ];
 
@@ -59,11 +58,3 @@ export default class HomePage extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.forms-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-</style>

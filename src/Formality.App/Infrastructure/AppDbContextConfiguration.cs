@@ -8,6 +8,7 @@ namespace Formality.App.Infrastructure
     public class AppDbContextConfiguration :
         IEntityTypeConfiguration<Form>,
         IEntityTypeConfiguration<FormField>,
+        IEntityTypeConfiguration<FormFieldRule>,
         IEntityTypeConfiguration<FormFieldValue>,
         IEntityTypeConfiguration<Submission>,
         IEntityTypeConfiguration<SubmissionValue>
@@ -49,6 +50,14 @@ namespace Formality.App.Infrastructure
             builder.HasIndex(x => x.Name)
                 .HasFilter($"{nameof(FormField.Deleted)} != 1")
                 .IsUnique();
+        }
+
+        public void Configure(EntityTypeBuilder<FormFieldRule> builder)
+        {
+            builder.HasKey(x => x.Id);
+
+            builder.Property(x => x.Type)
+                .IsRequired();
         }
 
         public void Configure(EntityTypeBuilder<FormFieldValue> builder)

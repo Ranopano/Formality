@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Formality.App.Submissions.Commands;
@@ -46,11 +45,20 @@ namespace Formality.Api.Controllers
         /// <param name="id">An identifier of a submission.</param>
         /// <param name="cancellationToken">A token to stop the current request.</param>
         [HttpGet("{id:int}")]
-        public Task<ActionResult<SubmissionListDto>> GetSubmission(
+        public async Task<ActionResult<SubmissionDto>> GetSubmission(
             int id,
             CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var submission = await _mediator.Send(
+                new GetSubmissionQuery { Id = id },
+                cancellationToken);
+
+            if (submission == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(submission);
         }
 
         /// <summary>

@@ -43,6 +43,8 @@ namespace Formality.App.Forms.Commands
                 throw new DomainException($@"Form ""{request.Name}"" doesn't exist yet.");
             }
 
+            form.StateId = FormState.Actual;
+
             foreach (var entity in form.Fields)
             {
                 entity.Deleted = true;

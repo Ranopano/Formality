@@ -20,7 +20,7 @@ export default class PageHeader extends Vue {
 
 <style lang="scss" scoped>
 .logo {
-  background: #efefef;
+  background: $app-color-gray-light;
   border-radius: 5px;
   text-shadow: 0 1px white;
 

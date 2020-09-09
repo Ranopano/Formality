@@ -23,7 +23,7 @@ import FormCreateNewButton from '../components/FormCreateNewButton.vue';
     FormList,
   },
 })
-export default class FormsPage extends Vue {
+export default class FormListPage extends Vue {
   private get header() {
     return `${title(this)} — Forms`;
   }

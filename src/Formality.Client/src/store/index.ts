@@ -1,28 +1,24 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
-import forms from '@/app/forms/store';
-import submissions from '@/app/submissions/store';
-import * as getters from './getters';
+import Vuex, { Module } from 'vuex';
+import forms from 'app/forms/store';
+import submissions from 'app/submissions/store';
+import actions from './actions';
+import getters from './getters';
+import mutations from './mutations';
+import state, { State } from './state';
 
 Vue.use(Vuex);
 
 const store = {
-  state: (): State => ({
-    title: 'Formality',
-  }),
-  mutations: {},
-  getters: {
-    [getters.title.name]: (state: State) => state.title,
-  },
-  actions: {},
+  strict: process.env.NODE_ENV !== 'production',
+  state,
+  mutations,
+  getters,
+  actions,
   modules: {
     forms,
     submissions,
   },
-};
-
-type State = {
-  title: string;
-}
+} as Module<State, State>;
 
 export default new Vuex.Store(store);

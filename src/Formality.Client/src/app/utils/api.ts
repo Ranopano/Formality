@@ -1,4 +1,16 @@
-const API_URL = 'https://localhost:5001';
+// eslint-disable-next-line max-classes-per-file
+const API_URL: string = process.env.VUE_APP_API_URL;
+
+export type ProblemDetails = {
+  detail?: string;
+  status?: number;
+  type?: string;
+  title?: string;
+}
+
+export type ValidationProblemDetails = ProblemDetails & {
+  errors?: Record<string, string[]>;
+}
 
 export type QueryString = Record<string, unknown>;
 
@@ -13,8 +25,7 @@ const handleResponse = async <T>(promise: Promise<Response>) => {
     }
   } else {
     try {
-      // TODO: return proper error
-      const error = await response.json() as { statusCode: number; message: string };
+      const error = await response.json() as ProblemDetails;
       return Promise.reject(error);
     } catch {
       return Promise.reject(new Error('An unexpected error occurred.'));
@@ -40,6 +51,8 @@ type PostOptions = HttpClientOptions & {
 };
 
 export default class HttpClient {
+  private readonly accept = 'application/json, application/problem+json';
+
   public constructor(private readonly basePath: string) {}
 
   public get<T>(url: string, options?: GetOptions): Promise<T> {
@@ -54,7 +67,7 @@ export default class HttpClient {
         cache: 'default',
         mode: 'cors',
         headers: {
-          Accept: 'application/json',
+          Accept: this.accept,
           ...headers,
         },
       }),
@@ -86,7 +99,7 @@ export default class HttpClient {
         credentials: 'include',
         mode: 'cors',
         headers: {
-          Accept: 'application/json',
+          Accept: this.accept,
           'Content-Type': 'application/json',
           ...headers,
         },

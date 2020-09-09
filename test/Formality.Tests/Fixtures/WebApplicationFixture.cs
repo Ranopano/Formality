@@ -25,14 +25,16 @@ namespace Formality.Tests.Fixtures
             base.ConfigureWebHost(builder);
 
             builder.UseEnvironment("Testing");
+
+            builder.ConfigureServices(services =>
+            {
+                services.AddScoped<AppDbContextSeed, AppDbContextTestSeed>();
+            });
         }
 
         protected override IHost CreateHost(IHostBuilder builder)
         {
             var host = base.CreateHost(builder);
-
-            // TODO: get filename from the config
-            File.Delete("db-test.sqlite");
 
             host.MigrateDbContext((App.Infrastructure.AppDbContext _, IServiceProvider services) =>
             {

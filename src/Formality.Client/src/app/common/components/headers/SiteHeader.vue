@@ -19,7 +19,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { BIconHouseDoorFill } from 'bootstrap-vue';
-import { Pages } from '@/router/types';
+import { Pages } from '@/router/pages';
 
 type RouteDefinition = {
   icon?: Vue.Component;

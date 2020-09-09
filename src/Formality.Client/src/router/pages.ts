@@ -4,5 +4,6 @@ export enum Pages {
   FormEdit = 'FormEdit',
   FormSubmit = 'FormSubmit',
   Submissions = 'Submissions',
+  SubmissionView = 'SubmissionView',
   NotFound = 'Not Found',
 }

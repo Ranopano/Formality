@@ -1,9 +1,7 @@
 namespace Formality.App.Common.Dto
 {
-    public class NamedEntityDto
+    public class NamedEntityDto : EntityDto
     {
-        public int? Id { get; set; }
-
         public string Name { get; set; } = string.Empty;
     }
 }

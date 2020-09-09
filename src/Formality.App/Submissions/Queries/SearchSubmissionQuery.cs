@@ -18,10 +18,11 @@ namespace Formality.App.Submissions.Queries
     public sealed class SearchSubmissionQueryHandler
         : IRequestHandler<SearchSubmissionQuery, SubmissionListDto[]>
     {
-        private readonly AppDbContext _context;
+        private readonly IReadOnlyAppDbContext _context;
+
         private readonly IMapper _mapper;
 
-        public SearchSubmissionQueryHandler(AppDbContext context, IMapper mapper)
+        public SearchSubmissionQueryHandler(IReadOnlyAppDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -44,7 +45,7 @@ namespace Formality.App.Submissions.Queries
             }
 
             var submissions = await _mapper
-                .ProjectTo<SubmissionListDto>(query, null, x => x.Values)
+                .ProjectTo<SubmissionListDto>(query, null)
                 .ToArrayAsync(cancellationToken);
 
             return submissions;

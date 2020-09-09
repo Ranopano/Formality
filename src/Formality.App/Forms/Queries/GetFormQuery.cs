@@ -16,10 +16,11 @@ namespace Formality.App.Forms.Queries
 
     public sealed class GetFormQueryHandler : IRequestHandler<GetFormQuery, FormDto>
     {
-        private readonly AppDbContext _context;
+        private readonly IReadOnlyAppDbContext _context;
+
         private readonly IMapper _mapper;
 
-        public GetFormQueryHandler(AppDbContext context, IMapper mapper)
+        public GetFormQueryHandler(IReadOnlyAppDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -29,10 +30,7 @@ namespace Formality.App.Forms.Queries
             GetFormQuery request,
             CancellationToken cancellationToken)
         {
-            var query = _context.Forms
-                .Include(x => x.Fields)
-                .ThenInclude(x => x.Values)
-                .Where(x => x.Id == request.Id);
+            var query = _context.Forms.Where(x => x.Id == request.Id);
 
             var result = await _mapper
                 .ProjectTo<FormDto>(query, null, x => x.Fields)

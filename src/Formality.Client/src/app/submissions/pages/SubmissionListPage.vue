@@ -1,7 +1,7 @@
 <template>
   <div class="submissions">
     <PageHeader :header="header" />
-    <SubmissionList />
+    <SubmissionList :searchable="true" />
   </div>
 </template>
 
@@ -18,7 +18,7 @@ import SubmissionList from '../components/SubmissionList.vue';
     SubmissionList,
   },
 })
-export default class SubmissionsPage extends Vue {
+export default class SubmissionListPage extends Vue {
   private get header() {
     return `${title(this)} — Submissions`;
   }

@@ -32,6 +32,8 @@ namespace Formality.Api.Middleware
 
                 await next(context);
 
+                //await _context.SaveChangesAsync();
+
                 await transaction.CommitAsync();
             }
             else

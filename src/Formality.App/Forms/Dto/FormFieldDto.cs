@@ -10,9 +10,11 @@ namespace Formality.App.Forms.Dto
 
         public string? Placeholder { get; set; }
 
-        public FieldType Type { get; set; } = FieldType.Text;
-
         public bool Deleted { get; set; }
+
+        public FieldType Type { get; set; }
+
+        public FormFieldRuleDto[] Rules { get; set; } = Array.Empty<FormFieldRuleDto>();
 
         public FormFieldValueDto[] Values { get; set; } = Array.Empty<FormFieldValueDto>();
     }

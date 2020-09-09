@@ -1,55 +1,54 @@
 <template>
   <div class="forms">
-    <transition-group name="fade">
-      <div v-if="loading" class="text-center" key="spinner">
-        <b-spinner small variant="primary" />
-      </div>
-      <ul v-else-if="items.length" class="list-group"  key="items">
-        <li class="list-group-item" v-for="item in items" :key="item.id">
-          <router-link
-            title="Submit this form"
-            :to="{ name: formSubmitPage, params: { id: item.id } }">
-            {{ item.name }}
-          </router-link>
-          <router-link
-            v-if="showEditButton"
-            class="edit-button"
-            title="Edit this form"
-            :to="{ name: formEditPage, params: { id: item.id } }"
-          >
-            <BIconPencilSquare />
-          </router-link>
-        </li>
-      </ul>
-      <small v-else class="text-muted" key="placeholder">
-        Nothing yet.
-      </small>
-    </transition-group>
+    <ContentLoader :showContent="items.length" :loading="loading">
+      <template #content>
+        <ul class="list-group">
+          <li class="list-group-item" v-for="item in items" :key="item.id">
+            <router-link
+              title="Submit this form"
+              :to="formSubmitPage(item)">
+              {{ item.name }}
+            </router-link>
+            <router-link
+              v-if="showEditButton"
+              class="edit-button"
+              title="Edit this form"
+              :to="formEditPage(item)"
+            >
+              <BIconPencilSquare />
+            </router-link>
+          </li>
+        </ul>
+      </template>
+    </ContentLoader>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { Pages } from '@/router/types';
+import { Pages } from '@/router/pages';
 import { BIconPencilSquare } from 'bootstrap-vue';
+import ContentLoader from 'app/common/components/ContentLoader.vue';
 import { forms, loading } from '../store/getters';
+import { FormListDto } from '../models';
 
 @Component({
   components: {
     BIconPencilSquare,
+    ContentLoader,
   },
 })
 export default class FormList extends Vue {
   @Prop({ default: false })
   public showEditButton!: boolean;
 
-  private get formEditPage() {
-    return Pages.FormEdit;
+  private formEditPage({ id }: FormListDto) {
+    return { name: Pages.FormEdit, params: { id } };
   }
 
-  private get formSubmitPage() {
-    return Pages.FormSubmit;
+  private formSubmitPage({ id }: FormListDto) {
+    return { name: Pages.FormSubmit, params: { id } };
   }
 
   private get items() {

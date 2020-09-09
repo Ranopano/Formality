@@ -1,26 +1,49 @@
 <template>
   <div class="submissions">
     <h4 v-if="header">{{ header }}</h4>
-    <transition-group name="fade">
-      <div v-if="loading" class="text-center" key="spinner">
+    <SubmissionSearch v-if="searchable" />
+    <ContentLoader :showContent="items.length" :loading="loading">
+      <template #spinner>
         <b-spinner small variant="secondary" />
-      </div>
-      <div v-else-if="items.length" key="items">
-        <b-table bordered :items="items" :fields="fields"></b-table>
-      </div>
-      <small v-else class="text-muted" key="placeholder">
-        {{ placeholder }}
-      </small>
-    </transition-group>
+      </template>
+      <template #content>
+        <b-table
+          bordered
+          :items="items"
+          :fields="fields"
+        >
+          <template #cell(id)="data">
+            <router-link :to="submissionView(data.value)" class="btn btn-primary btn-sm">
+              <b>Open</b>
+            </router-link>
+          </template>
+        </b-table>
+      </template>
+      <template #placeholder>{{ placeholder }}</template>
+    </ContentLoader>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { SubmissionListDto } from '@/models';
+import { BvTableField } from 'bootstrap-vue';
+import { Pages } from '@/router/pages';
+import { utcLocal } from '@/app/utils';
+import ContentLoader from 'app/common/components/ContentLoader.vue';
 import { submissions, loading } from '../store/getters';
+import { SubmissionListDto } from '../models';
+import SubmissionSearch from './SubmissionSearch.vue';
 
-@Component
+type TableField = BvTableField & {
+  key: string;
+}
+
+@Component({
+  components: {
+    ContentLoader,
+    SubmissionSearch,
+  },
+})
 export default class SubmissionList extends Vue {
   @Prop()
   public header?: string;
@@ -28,19 +51,27 @@ export default class SubmissionList extends Vue {
   @Prop({ default: 'Nobody here but us chickens, chief.' })
   public placeholder!: string;
 
-  private get fields() {
+  @Prop({ default: false })
+  public searchable!: boolean;
+
+  private submissionView(id: number) {
+    return { name: Pages.SubmissionView, params: { id } };
+  }
+
+  private get fields(): TableField[] {
     return [
       {
-        key: 'id',
-        label: 'Submission',
+        key: 'createDateTime',
+        label: 'Date',
+        formatter: utcLocal,
       },
       {
         key: 'form.name',
         label: 'Form',
       },
       {
-        key: 'createDateTime',
-        label: 'Date',
+        key: 'id',
+        label: 'Actions',
       },
     ];
   }

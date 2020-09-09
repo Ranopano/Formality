@@ -7,6 +7,8 @@ namespace Formality.App.Forms.Models
     {
         public string Name { get; set; } = string.Empty;
 
+        public FormState StateId { get; set; } = FormState.New;
+
         public ICollection<FormField> Fields { get; set; } = new List<FormField>();
     }
 }

@@ -5,6 +5,7 @@ using AutoMapper;
 using Formality.App.Common.Extensions;
 using Formality.App.Common.Queries;
 using Formality.App.Forms.Dto;
+using Formality.App.Forms.Models;
 using Formality.App.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -13,14 +14,16 @@ namespace Formality.App.Forms.Queries
 {
     public class SearchFormQuery : SearchQuery<FormListDto[]>
     {
+        public FormState? StateId { get; set; }
     }
 
     public sealed class SearchFormQueryHandler : IRequestHandler<SearchFormQuery, FormListDto[]>
     {
-        private readonly AppDbContext _context;
+        private readonly IReadOnlyAppDbContext _context;
+
         private readonly IMapper _mapper;
 
-        public SearchFormQueryHandler(AppDbContext context, IMapper mapper)
+        public SearchFormQueryHandler(IReadOnlyAppDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -31,6 +34,7 @@ namespace Formality.App.Forms.Queries
             CancellationToken cancellationToken)
         {
             var query = _context.Forms
+                .Where(x => request.StateId == null || x.StateId == request.StateId)
                 .WithOrderBy(request)
                 .Take(request.MaxResults);
 

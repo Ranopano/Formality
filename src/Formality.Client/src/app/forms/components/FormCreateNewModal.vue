@@ -15,16 +15,18 @@
       <form @submit.stop.prevent>
         <b-form-group
           :state="nameState"
-          label="Name"
           label-for="name"
-          description="Choose a new name for a form."
+          description="Choose a name for a new form."
           invalid-feedback="Name is required"
         >
+          <label>
+            <b>Name</b>
+          </label>
           <b-input
             id="name"
             type="text"
             :disabled="loading"
-            v-model="name"
+            v-model.trim="name"
             :state="nameState"
           />
         </b-form-group>
@@ -35,7 +37,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Pages } from '@/router/types';
+import { Pages } from '@/router/pages';
 import { createForm } from '../store/actions';
 import { error, formId } from '../store/getters';
 import { setError } from '../store/mutations';

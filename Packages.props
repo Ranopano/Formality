@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project>
   <!-- Microsoft packages -->
   <ItemGroup>
@@ -7,6 +7,7 @@
     <PackageReference Update="Microsoft.EntityFrameworkCore" Version="3.1.7" />
     <PackageReference Update="Microsoft.EntityFrameworkCore.Design" Version="3.1.7" />
     <PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.7" />
+    <PackageReference Update="System.Text.Json" Version="4.7.2" />
   </ItemGroup>
   <!-- Visual Studio packages -->
   <ItemGroup>

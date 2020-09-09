@@ -1,11 +1,10 @@
+using Formality.App.Common.Models;
 using System.Collections.Generic;
 
 namespace Formality.App.Forms.Models
 {
-    public class FormField
+    public class FormField : Entity
     {
-        public int Id { get; set; }
-
         public string Name { get; set; } = string.Empty;
 
         public string Label { get; set; } = string.Empty;
@@ -14,9 +13,11 @@ namespace Formality.App.Forms.Models
 
         public Form Form { get; set; } = default!;
 
-        public FieldType Type { get; set; } = FieldType.Text;
+        public FieldType Type { get; set; } = FieldType.Unknown;
 
         public bool Deleted { get; set; }
+
+        public ICollection<FormFieldRule> Rules { get; set; } = new List<FormFieldRule>();
 
         public ICollection<FormFieldValue> Values { get; set; } = new List<FormFieldValue>();
     }
