@@ -1,5 +1,4 @@
-# Formality
-A dummy project to build web forms and stuff.
+![Screenshot_2020-09-10 Formality](https://user-images.githubusercontent.com/17101928/92691123-c1a27380-f34a-11ea-8dd7-c51eb9728cfb.png)
 
 #### Usage:
 Run this command:
