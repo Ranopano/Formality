@@ -39,22 +39,19 @@ namespace Formality.Api.Middleware
             }
             catch (DomainException ex)
             {
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 await HandleException(
                     context,
                     title: "A domain error occurred.",
                     detail: ex.Message,
-                    type: "domain");
+                    type: "domain",
+                    statusCode: StatusCodes.Status400BadRequest);
             }
             catch (ValidationException ex)
             {
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 await HandleValidationException(context, ex);
             }
             catch (Exception ex)
             {
-                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-
                 _logger.LogError(ex, ex.Message);
 
                 await HandleException(context, detail: _environment.IsProduction() ? null : ex.Message);
@@ -65,12 +62,15 @@ namespace Formality.Api.Middleware
             HttpContext context,
             string? title = null,
             string? detail = null,
-            string? type = null)
+            string? type = null,
+            int statusCode = StatusCodes.Status500InternalServerError)
         {
             if (context.Response.HasStarted)
             {
                 return;
             }
+
+            context.Response.StatusCode = statusCode;
 
             var details = _problemDetailsFactory.CreateProblemDetails(
                 httpContext: context,
@@ -88,6 +88,8 @@ namespace Formality.Api.Middleware
             {
                 return;
             }
+
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
 
             var modelState = new ModelStateDictionary();
             var validationResult = new ValidationResult(ex.Errors);

@@ -1,11 +1,12 @@
 <template>
   <div class="submission-search row pt-1 pb-3">
-    <div class="col-sm-3">
+    <div class="col">
       <b-input
         type="text"
         debounce="500"
         v-model="keyword"
-        placeholder="Type to filter submissions..." />
+        placeholder="Type to filter submissions..."
+      />
     </div>
   </div>
 </template>
@@ -26,13 +27,13 @@ export default class SubmissionSearch extends Vue {
   @Watch('keyword')
   private async onKeywordChange(value: string, previousValue: string) {
     if (value !== previousValue && !this.loading) {
-      await this.$store.dispatch(searchSubmission({
-        keyword: value,
-        maxResults: 10,
-        orderBy: [
-          { name: 'id', desc: true },
-        ],
-      }));
+      await this.$store.dispatch(
+        searchSubmission({
+          keyword: value,
+          maxResults: 10,
+          orderBy: [{ name: 'id', desc: true }],
+        })
+      );
     }
   }
 }

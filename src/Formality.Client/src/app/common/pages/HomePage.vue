@@ -1,6 +1,9 @@
 <template>
   <div class="home">
-    <PageHeader :header="title" description="A dummy project to build web forms and stuff" />
+    <PageHeader
+      :header="title"
+      description="A dummy project to build web forms and stuff"
+    />
     <div class="row no-gutters">
       <section class="col-sm-9 p-2">
         <SubmissionList header="Latest submissions" />
@@ -33,9 +36,7 @@ import { mapGetters } from 'vuex';
     SubmissionList,
   },
   computed: {
-    ...mapGetters([
-      title.name,
-    ]),
+    ...mapGetters([title.name]),
   },
 })
 export default class HomePage extends Vue {
@@ -44,9 +45,7 @@ export default class HomePage extends Vue {
   private async created() {
     const query = {
       maxResults: 10,
-      orderBy: [
-        { name: 'id', desc: true },
-      ],
+      orderBy: [{ name: 'id', desc: true }],
     };
 
     const tasks = [

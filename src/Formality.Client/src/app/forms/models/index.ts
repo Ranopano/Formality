@@ -1,13 +1,13 @@
 export type FormListDto = {
   id?: number;
   name: string;
-}
+};
 
 export type FormDto = {
   id?: number;
   name: string;
   fields: FormFieldDto[];
-}
+};
 
 export type FormFieldDto = {
   id?: number;
@@ -18,19 +18,19 @@ export type FormFieldDto = {
   deleted: boolean;
   rules: FormFieldRuleDto[];
   values: FormFieldValueDto[];
-}
+};
 
 export type FormFieldRuleDto = {
   id: number;
   fieldId: number;
   type: FieldRule;
   data?: string;
-}
+};
 
 export type FormFieldValueDto = {
   id?: number;
   value: string;
-}
+};
 
 export enum FormState {
   New = 0,
@@ -53,4 +53,4 @@ export enum FieldRule {
 export type LengthData = {
   minLength?: number;
   maxLength?: number;
-}
+};

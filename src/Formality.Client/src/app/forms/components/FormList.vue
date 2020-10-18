@@ -4,9 +4,7 @@
       <template #content>
         <ul class="list-group">
           <li class="list-group-item" v-for="item in items" :key="item.id">
-            <router-link
-              title="Submit this form"
-              :to="formSubmitPage(item)">
+            <router-link title="Submit this form" :to="formSubmitPage(item)">
               {{ item.name }}
             </router-link>
             <router-link
@@ -40,8 +38,8 @@ import { FormListDto } from '../models';
   },
 })
 export default class FormList extends Vue {
-  @Prop({ default: false })
-  public showEditButton!: boolean;
+  @Prop({ default: false, required: false })
+  public showEditButton?: boolean;
 
   private formEditPage({ id }: FormListDto) {
     return { name: Pages.FormEdit, params: { id } };

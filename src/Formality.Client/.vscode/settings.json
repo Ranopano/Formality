@@ -1,0 +1,18 @@
+{
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "eslint.alwaysShowStatus": true,
+  "eslint.validate": ["typescript", "javascript", "vue"],
+  "files.exclude": {
+    "**/node_modules": true
+  },
+  "javascript.format.enable": false,
+  "typescript.format.enable": false,
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+  "vetur.experimental.templateInterpolationService": false,
+  "vetur.format.defaultFormatter.js": "prettier-eslint",
+  "vetur.format.defaultFormatter.ts": "prettier-tslint",
+  "vetur.validation.template": false
+}

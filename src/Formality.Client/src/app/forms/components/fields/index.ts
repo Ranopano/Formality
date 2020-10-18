@@ -1,6 +1,9 @@
 import { Prop, Vue } from 'vue-property-decorator';
 import {
-  FormFieldDto, FormFieldRuleDto, FieldRule, LengthData,
+  FormFieldDto,
+  FormFieldRuleDto,
+  FieldRule,
+  LengthData,
 } from '../../models';
 
 export type FormFieldModel = {

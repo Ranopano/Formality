@@ -24,15 +24,14 @@ export default class SubmissionListPage extends Vue {
   }
 
   async created() {
-    await this.$store.dispatch(searchSubmission({
-      maxResults: 10,
-      orderBy: [
-        { name: 'id', desc: true },
-      ],
-    }));
+    await this.$store.dispatch(
+      searchSubmission({
+        maxResults: 10,
+        orderBy: [{ name: 'id', desc: true }],
+      })
+    );
   }
 }
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

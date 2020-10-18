@@ -5,9 +5,11 @@ import { getType } from '..';
 import { SubmissionListDto, SubmissionDto } from '../models';
 import { State } from './state';
 
-export const error = (v: Vue): string | undefined => v.$store.getters[getType(error)] || false;
+export const error = (v: Vue): string | undefined =>
+  v.$store.getters[getType(error)] || false;
 
-export const loading = (v: Vue): boolean => v.$store.getters[getType(loading)] || false;
+export const loading = (v: Vue): boolean =>
+  v.$store.getters[getType(loading)] || false;
 
 export const submission = (v: Vue): SubmissionDto | undefined => {
   return v.$store.getters[getType(submission)] || [];

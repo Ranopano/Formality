@@ -10,7 +10,8 @@
       :hide-header-close="loading"
       @ok="onSubmit"
       @show="clear"
-      @hidden="clear">
+      @hidden="clear"
+    >
       <div v-if="error" class="text-danger pb-3">{{ error }}</div>
       <form @submit.stop.prevent>
         <b-form-group

@@ -7,13 +7,12 @@
         <b-spinner small variant="secondary" />
       </template>
       <template #content>
-        <b-table
-          bordered
-          :items="items"
-          :fields="fields"
-        >
+        <b-table bordered :items="items" :fields="fields">
           <template #cell(id)="data">
-            <router-link :to="submissionView(data.value)" class="btn btn-primary btn-sm">
+            <router-link
+              :to="submissionView(data.value)"
+              class="btn btn-primary btn-sm"
+            >
               <b>Open</b>
             </router-link>
           </template>
@@ -36,7 +35,7 @@ import SubmissionSearch from './SubmissionSearch.vue';
 
 type TableField = BvTableField & {
   key: string;
-}
+};
 
 @Component({
   components: {

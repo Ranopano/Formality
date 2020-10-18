@@ -47,10 +47,10 @@ namespace Formality.Tests.FunctionalTests
         [Fact]
         public async Task AddSubmission_Invalid_ShouldReturnValidationErrors()
         {
-            var json = File.ReadAllText("Fixtures/submission.invalid.json");
+            var json = await File.ReadAllTextAsync("Fixtures/submission.invalid.json");
             var jsonContent = new StringContent(json, UTF8Encoding.UTF8, MediaTypeNames.Application.Json);
+
             var response = await Client.PostAsync(_requestUri, jsonContent);
-            var responseContent = await response.Content.ReadAsStringAsync();
 
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
@@ -62,7 +62,7 @@ namespace Formality.Tests.FunctionalTests
         [Fact]
         public async Task AddSubmission_Valid_ShouldBeCreatedAndReturned()
         {
-            var json = File.ReadAllText("Fixtures/submission.json");
+            var json = await File.ReadAllTextAsync("Fixtures/submission.json");
             var jsonContent = new StringContent(json, UTF8Encoding.UTF8, MediaTypeNames.Application.Json);
 
             var response = await Client.PostAsync(_requestUri, jsonContent);

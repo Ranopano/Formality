@@ -24,7 +24,7 @@ import { Pages } from '@/router/pages';
 type RouteDefinition = {
   icon?: Vue.Component;
   name: Pages;
-}
+};
 
 @Component({
   components: {

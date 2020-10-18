@@ -3,7 +3,13 @@ module.exports = {
   env: {
     node: true
   },
-  extends: ["plugin:vue/essential", "@vue/airbnb", "@vue/typescript/recommended"],
+  extends: [
+    "plugin:vue/essential",
+    "eslint:recommended",
+    "@vue/typescript/recommended",
+    "@vue/prettier",
+    "@vue/prettier/@typescript-eslint"
+  ],
   parserOptions: {
     ecmaVersion: 2020,
     ecmaFeatures: {
@@ -11,8 +17,6 @@ module.exports = {
     }
   },
   rules: {
-    quotes: ["error", "single"],
-    "max-len": ["error", { "code": 100, "tabWidth": 4, "ignoreComments": true }],
     "arrow-parens": ["error", "as-needed"],
     "arrow-body-style": "off",
     "no-plusplus": "off",
@@ -21,7 +25,17 @@ module.exports = {
     "class-methods-use-this": "off",
     "consistent-return": "off",
     "no-restricted-syntax": "off",
-    "no-param-reassign": ["error", { "props": false }]
+    "no-param-reassign": ["error", { props: false }],
+    "prettier/prettier": [
+      "warn",
+      {
+        "arrowParens": "avoid",
+        "singleQuote": true,
+        "endOfLine": "lf",
+        "trailingComma": "es5",
+        "printWidth": 80,
+      }
+    ],
   },
   overrides: [
     {

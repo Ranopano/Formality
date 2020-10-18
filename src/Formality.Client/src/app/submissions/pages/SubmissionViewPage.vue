@@ -11,7 +11,7 @@
             <span v-if="form" class="form-name">{{ form.name }}</span>
             <span v-if="date" class="text-muted">{{ date }}</span>
           </header>
-          <hr>
+          <hr />
           <b-form-group v-for="value of submission.values" :key="value.id">
             <label>
               <b>{{ getLabel(value.fieldId) }}</b>

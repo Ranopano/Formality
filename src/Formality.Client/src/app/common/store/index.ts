@@ -17,7 +17,7 @@ export type Mutations<T> = {
 const mapState = <TState, TMapper extends Function>(
   prefix: string,
   getMapper: (key: keyof TState) => TMapper,
-  items: [keyof TState, Function?][],
+  items: [keyof TState, Function?][]
 ) => {
   return items.reduce((result, [key, handler]) => {
     const stateKey = key.toString();
@@ -32,9 +32,13 @@ export const mapStateGetters = <T>(getters: [keyof T, Function?][]) => {
 };
 
 export const mapStateSetters = <T>(setters: [keyof T, Function?][]) => {
-  return mapState<T, Mutation<T>>('set', key => {
-    return (currentState, newState) => {
-      currentState[key] = newState[key];
-    };
-  }, setters);
+  return mapState<T, Mutation<T>>(
+    'set',
+    key => {
+      return (currentState, newState) => {
+        currentState[key] = newState[key];
+      };
+    },
+    setters
+  );
 };

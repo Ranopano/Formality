@@ -6,13 +6,17 @@ import * as Api from '../api';
 import { SubmissionDto } from '../models';
 import * as getters from './getters';
 import {
-  setLoading, setError, setSubmission, setSubmissions,
+  setLoading,
+  setError,
+  setSubmission,
+  setSubmissions,
 } from './mutations';
 import { State } from './state';
 
-export const getSubmission = (id: number) => (
-  { type: getType(getSubmission), id }
-);
+export const getSubmission = (id: number) => ({
+  type: getType(getSubmission),
+  id,
+});
 
 export const tryGetSubmission = async (v: Vue) => {
   const id = Number(v.$route.params.id);
@@ -28,13 +32,15 @@ export const tryGetSubmission = async (v: Vue) => {
   return false;
 };
 
-export const searchSubmission = (query?: Api.SearchSubmissionQuery) => (
-  { type: getType(searchSubmission), query }
-);
+export const searchSubmission = (query?: Api.SearchSubmissionQuery) => ({
+  type: getType(searchSubmission),
+  query,
+});
 
-export const addSubmission = (submission: SubmissionDto) => (
-  { type: getType(addSubmission), submission }
-);
+export const addSubmission = (submission: SubmissionDto) => ({
+  type: getType(addSubmission),
+  submission,
+});
 
 type Actions = {
   getSubmission: Action<typeof getSubmission, State>;
@@ -48,29 +54,23 @@ const tryAction = tryActionWith({
 });
 
 const actions: Actions = {
-  getSubmission: async ({ commit }, { id }) => tryAction(
-    commit,
-    async () => {
+  getSubmission: async ({ commit }, { id }) =>
+    tryAction(commit, async () => {
       const item = await Api.getSubmission(id);
       commit(setSubmission(item), { root: true });
-    },
-  ),
-  searchSubmission: async ({ commit }, { query }) => tryAction(
-    commit,
-    async () => {
+    }),
+  searchSubmission: async ({ commit }, { query }) =>
+    tryAction(commit, async () => {
       const items = await Api.searchSubmission(query);
       commit(setSubmissions(items), { root: true });
-    },
-  ),
-  addSubmission: async ({ commit }, { submission }) => tryAction(
-    commit,
-    async () => {
+    }),
+  addSubmission: async ({ commit }, { submission }) =>
+    tryAction(commit, async () => {
       const id = await Api.addSubmission(submission);
       if (!Number(id)) {
         commit(setError('Cannot add submission.'), { root: true });
       }
-    },
-  ),
+    }),
 };
 
 export default actions;

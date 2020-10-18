@@ -1,6 +1,10 @@
 import { httpClient } from 'app/utils/api';
 import { SearchQueryDto } from 'app/common/models';
-import { SubmissionDto, SubmissionListDto, SubmissionValueDto } from '../models';
+import {
+  SubmissionDto,
+  SubmissionListDto,
+  SubmissionValueDto,
+} from '../models';
 
 const endpoint = '/api/submissions';
 

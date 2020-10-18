@@ -35,10 +35,12 @@ export default class ContentLoader extends Vue {
 </script>
 
 <style lang="scss">
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: all 0.5s;
 }
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
   height: 0;
 }

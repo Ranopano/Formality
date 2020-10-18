@@ -6,11 +6,11 @@ export type ProblemDetails = {
   status?: number;
   type?: string;
   title?: string;
-}
+};
 
 export type ValidationProblemDetails = ProblemDetails & {
   errors?: Record<string, string[]>;
-}
+};
 
 export type QueryString = Record<string, unknown>;
 
@@ -25,7 +25,7 @@ const handleResponse = async <T>(promise: Promise<Response>) => {
     }
   } else {
     try {
-      const error = await response.json() as ProblemDetails;
+      const error = (await response.json()) as ProblemDetails;
       return Promise.reject(error);
     } catch {
       return Promise.reject(new Error('An unexpected error occurred.'));
@@ -70,16 +70,14 @@ export default class HttpClient {
           Accept: this.accept,
           ...headers,
         },
-      }),
+      })
     );
 
     return response;
   }
 
   public post<T>(url: string, options?: PostOptions): Promise<T> {
-    const {
-      data, headers, query, signal,
-    } = options || {};
+    const { data, headers, query, signal } = options || {};
 
     let body = '';
 
@@ -103,7 +101,7 @@ export default class HttpClient {
           'Content-Type': 'application/json',
           ...headers,
         },
-      }),
+      })
     );
   }
 }

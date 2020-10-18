@@ -1,5 +1,5 @@
 <template>
-  <div class="form-submit" >
+  <div class="form-submit">
     <PageHeader :header="header" />
     <ContentLoader :showContent="form && submission" :loading="loading">
       <template #spinner>
@@ -72,7 +72,9 @@ export default class FormSubmitPage extends Vue {
   private submission: SubmissionDto | null = null;
 
   private get json() {
-    return debug(this) ? JSON.stringify(this.submission || {}, null, '  ') : undefined;
+    return debug(this)
+      ? JSON.stringify(this.submission || {}, null, '  ')
+      : undefined;
   }
 
   private get error() {
@@ -134,11 +136,13 @@ export default class FormSubmitPage extends Vue {
       const { id, fields } = this.form;
       this.submission = {
         formId: id,
-        values: fields.map((x): SubmissionValueDto => ({
-          fieldId: x.id,
-          type: x.type,
-          value: '',
-        })),
+        values: fields.map(
+          (x): SubmissionValueDto => ({
+            fieldId: x.id,
+            type: x.type,
+            value: '',
+          })
+        ),
       };
     }
   }

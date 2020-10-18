@@ -7,9 +7,9 @@ export type SearchQueryDto = {
 export type OrderDto = {
   name: string;
   desc?: boolean;
-}
+};
 
 export type NamedEntityDto = {
   id?: number;
   name?: string;
-}
+};
