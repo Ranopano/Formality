@@ -1,8 +1,7 @@
-namespace Formality.App.Forms.Models
+namespace Formality.App.Forms.Models;
+
+public enum FormState
 {
-    public enum FormState
-    {
-        New,
-        Actual,
-    }
+    New,
+    Actual,
 }

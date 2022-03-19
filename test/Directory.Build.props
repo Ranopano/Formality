@@ -5,8 +5,8 @@
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <RunAnalyzers>false</RunAnalyzers>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RunAnalyzers>true</RunAnalyzers>
   </PropertyGroup>
 
   <ItemGroup>

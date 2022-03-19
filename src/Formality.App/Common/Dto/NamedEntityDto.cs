@@ -1,7 +1,6 @@
-namespace Formality.App.Common.Dto
+namespace Formality.App.Common.Dto;
+
+public class NamedEntityDto : EntityDto
 {
-    public class NamedEntityDto : EntityDto
-    {
-        public string Name { get; set; } = string.Empty;
-    }
+    public string Name { get; set; } = string.Empty;
 }

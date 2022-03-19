@@ -10,45 +10,44 @@ using Formality.App.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Formality.App.Forms.Queries
+namespace Formality.App.Forms.Queries;
+
+public class SearchFormQuery : SearchQuery<FormListDto[]>
 {
-    public class SearchFormQuery : SearchQuery<FormListDto[]>
+    public FormState? StateId { get; set; }
+}
+
+public sealed class SearchFormQueryHandler : IRequestHandler<SearchFormQuery, FormListDto[]>
+{
+    private readonly IReadOnlyAppDbContext _context;
+
+    private readonly IMapper _mapper;
+
+    public SearchFormQueryHandler(IReadOnlyAppDbContext context, IMapper mapper)
     {
-        public FormState? StateId { get; set; }
+        _context = context;
+        _mapper = mapper;
     }
 
-    public sealed class SearchFormQueryHandler : IRequestHandler<SearchFormQuery, FormListDto[]>
+    public async Task<FormListDto[]> Handle(
+        SearchFormQuery request,
+        CancellationToken cancellationToken)
     {
-        private readonly IReadOnlyAppDbContext _context;
+        var query = _context.Forms
+            .Where(x => request.StateId == null || x.StateId == request.StateId)
+            .WithOrderBy(request)
+            .Take(request.MaxResults);
 
-        private readonly IMapper _mapper;
-
-        public SearchFormQueryHandler(IReadOnlyAppDbContext context, IMapper mapper)
+        if (!string.IsNullOrWhiteSpace(request.Keyword))
         {
-            _context = context;
-            _mapper = mapper;
+            var pattern = $"%{request.Keyword}%";
+            query = query.Where(x => EF.Functions.Like(x.Name, pattern));
         }
 
-        public async Task<FormListDto[]> Handle(
-            SearchFormQuery request,
-            CancellationToken cancellationToken)
-        {
-            var query = _context.Forms
-                .Where(x => request.StateId == null || x.StateId == request.StateId)
-                .WithOrderBy(request)
-                .Take(request.MaxResults);
+        var fields = await _mapper
+            .ProjectTo<FormListDto>(query)
+            .ToArrayAsync(cancellationToken);
 
-            if (!string.IsNullOrWhiteSpace(request.Keyword))
-            {
-                var pattern = $"%{request.Keyword}%";
-                query = query.Where(x => EF.Functions.Like(x.Name, pattern));
-            }
-
-            var fields = await _mapper
-                .ProjectTo<FormListDto>(query)
-                .ToArrayAsync(cancellationToken);
-
-            return fields;
-        }
+        return fields;
     }
 }

@@ -3,26 +3,24 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Formality.Api.Extensions
+namespace Formality.Api.Extensions;
+
+public static class IHostExtensions
 {
-    public static class IHostExtensions
+    public static IHost MigrateDbContext<TContext>(
+        this IHost host,
+        Action<TContext, IServiceProvider>? action = null)
+        where TContext : DbContext
     {
-        public static IHost MigrateDbContext<TContext>(
-            this IHost host,
-            Action<TContext, IServiceProvider>? action = null)
-            where TContext : DbContext
-        {
-            using var scope = host.Services.CreateScope();
-            {
-                var provider = scope.ServiceProvider;
-                var context = provider.GetRequiredService<TContext>();
+        using var scope = host.Services.CreateScope();
 
-                context.Database.Migrate();
+        var provider = scope.ServiceProvider;
+        var context = provider.GetRequiredService<TContext>();
 
-                action?.Invoke(context, provider);
-            }
+        context.Database.Migrate();
 
-            return host;
-        }
+        action?.Invoke(context, provider);
+
+        return host;
     }
 }

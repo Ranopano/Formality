@@ -1,36 +1,30 @@
-using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Formality.App.Common.Dto;
-using Formality.App.Common.Queries;
 
-namespace Formality.Tests.Fixtures
+namespace Formality.Tests.Fixtures;
+
+public abstract class ControllerTestBase : IWebApplicationFixture
 {
-    public abstract class ControllerTestBase : IWebApplicationFixture
+    public ControllerTestBase(WebApplicationFixture factory)
     {
-        public ControllerTestBase(WebApplicationFixture factory)
+        Client = factory.CreateClient();
+    }
+
+    protected HttpClient Client { get; }
+
+    protected async Task<T> DeserializeResponse<T>(HttpResponseMessage response)
+    {
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (string.IsNullOrEmpty(content))
         {
-            Client = factory.CreateClient();
+            return default;
         }
 
-        protected HttpClient Client { get;  }
-
-        protected async Task<T> DeserializeResponse<T>(HttpResponseMessage response)
+        return JsonSerializer.Deserialize<T>(content, new JsonSerializerOptions
         {
-            var content = await response.Content.ReadAsStringAsync();
-
-            if (string.IsNullOrEmpty(content))
-            {
-                return default;
-            }
-
-            return JsonSerializer.Deserialize<T>(content, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
-        }
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        });
     }
 }

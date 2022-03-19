@@ -1,17 +1,16 @@
-namespace Formality.App.Forms.Models
+namespace Formality.App.Forms.Models;
+
+public enum FieldType
 {
-    public enum FieldType
-    {
-        Unknown,
+    Unknown,
 
-        SingleLineText,
+    SingleLineText,
 
-        MultiLineText,
+    MultiLineText,
 
-        Checkbox,
+    Checkbox,
 
-        Radio,
+    Radio,
 
-        Dropdown,
-    }
+    Dropdown,
 }

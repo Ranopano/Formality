@@ -1,7 +1,6 @@
-namespace Formality.App.Common.Dto
+namespace Formality.App.Common.Dto;
+
+public class EntityDto
 {
-    public class EntityDto
-    {
-        public int? Id { get; set; }
-    }
+    public int? Id { get; set; }
 }

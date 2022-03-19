@@ -3,24 +3,23 @@ using Formality.App.Common.Dto;
 using Formality.App.Forms.Dto;
 using Formality.App.Forms.Models;
 
-namespace Formality.App.Infrastructure.AutoMapper
+namespace Formality.App.Infrastructure.AutoMapper;
+
+public class FormsProfile : Profile
 {
-    public class FormsProfile : Profile
+    public FormsProfile()
     {
-        public FormsProfile()
-        {
-            CreateMap<Form, FormDto>()
-                .ForMember(x => x.Fields, x => x.ExplicitExpansion());
-            CreateMap<Form, FormListDto>();
-            CreateMap<Form, NamedEntityDto>();
+        CreateMap<Form, FormDto>()
+            .ForMember(x => x.Fields, x => x.ExplicitExpansion());
+        CreateMap<Form, FormListDto>();
+        CreateMap<Form, NamedEntityDto>();
 
-            CreateMap<FormField, FormFieldDto>();
-            CreateMap<FormField, FieldRulesDto>();
+        CreateMap<FormField, FormFieldDto>();
+        CreateMap<FormField, FieldRulesDto>();
 
-            CreateMap<FormFieldRule, FormFieldRuleDto>();
-            CreateMap<FormFieldRule, RuleDto>();
+        CreateMap<FormFieldRule, FormFieldRuleDto>();
+        CreateMap<FormFieldRule, RuleDto>();
 
-            CreateMap<FormFieldValue, FormFieldValueDto>();
-        }
+        CreateMap<FormFieldValue, FormFieldValueDto>();
     }
 }

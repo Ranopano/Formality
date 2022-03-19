@@ -1,55 +1,51 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Formality.App.Infrastructure;
 using Formality.App.Submissions.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Formality.Tests.Fixtures
+namespace Formality.Tests.Fixtures;
+
+public class AppDbContextTestSeed : AppDbContextSeed
 {
-    public class AppDbContextTestSeed : AppDbContextSeed
+    private readonly AppDbContext _context;
+
+    public AppDbContextTestSeed(AppDbContext context) : base(context)
     {
-        private readonly AppDbContext _context;
+        _context = context;
+    }
 
-        public AppDbContextTestSeed(AppDbContext context) : base(context)
+    public override async Task SeedAsync()
+    {
+        await base.SeedAsync();
+
+        if (!await _context.Submissions.AnyAsync())
         {
-            _context = context;
+            await AddDefaultSubmission();
         }
+    }
 
-        public override async Task SeedAsync()
+    private async Task AddDefaultSubmission()
+    {
+        var form = await _context.Forms
+            .Include(x => x.Fields)
+            .FirstAsync();
+
+        var submission = new Submission
         {
-            await base.SeedAsync();
+            Form = form,
+            Values = form.Fields
+                .Select(x => new SubmissionValue
+                {
+                    Field = x,
+                    Type = x.Type,
+                    Value = x.Name
+                })
+                .ToList()
+        };
 
-            if (!await _context.Submissions.AnyAsync())
-            {
-                await AddDefaultSubmission();
-            }
-        }
+        _context.Add(submission);
 
-        private async Task AddDefaultSubmission()
-        {
-            var form = await _context.Forms
-                .Include(x => x.Fields)
-                .FirstAsync();
-
-            var submission = new Submission
-            {
-                Form = form,
-                Values = form.Fields
-                    .Select(x => new SubmissionValue
-                    {
-                        Field = x,
-                        Type = x.Type,
-                        Value = x.Name
-                    })
-                    .ToList()
-            };
-
-            _context.Add(submission);
-
-            await _context.SaveChangesAsync();
-        }
+        await _context.SaveChangesAsync();
     }
 }

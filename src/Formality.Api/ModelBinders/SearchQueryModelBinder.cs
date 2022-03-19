@@ -5,49 +5,48 @@ using Formality.App.Common.Queries;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
-namespace Formality.Api.ModelBinders
+namespace Formality.Api.ModelBinders;
+
+public class SearchQueryModelBinder : IModelBinder
 {
-    public class SearchQueryModelBinder : IModelBinder
+    public async Task BindModelAsync(ModelBindingContext bindingContext)
     {
-        public async Task BindModelAsync(ModelBindingContext bindingContext)
+        var request = bindingContext.ActionContext.HttpContext.Request;
+
+        var queryString = WebUtility.UrlDecode(request.QueryString.Value?.TrimStart('?'));
+
+        if (string.IsNullOrWhiteSpace(queryString))
         {
-            var request = bindingContext.ActionContext.HttpContext.Request;
-
-            var queryString = WebUtility.UrlDecode(request.QueryString.Value.TrimStart('?'));
-
-            if (string.IsNullOrWhiteSpace(queryString))
-            {
-                return;
-            }
-
-            var query = JsonSerializer.Deserialize(
-                queryString,
-                bindingContext.ModelType,
-                new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                });
-
-            bindingContext.Result = ModelBindingResult.Success(query);
-
-            // TODO: handle parsing errors
-
-            await Task.CompletedTask;
+            return;
         }
 
-        public class Provider : IModelBinderProvider
-        {
-            public IModelBinder? GetBinder(ModelBinderProviderContext context)
+        var query = JsonSerializer.Deserialize(
+            queryString,
+            bindingContext.ModelType,
+            new JsonSerializerOptions
             {
-                var type = context.Metadata.ModelType.BaseType;
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
 
-                if (type?.IsGenericType == true && type.GetGenericTypeDefinition() == typeof(SearchQuery<>))
-                {
-                    return new BinderTypeModelBinder(typeof(SearchQueryModelBinder));
-                }
+        bindingContext.Result = ModelBindingResult.Success(query);
 
-                return null;
+        // TODO: handle parsing errors
+
+        await Task.CompletedTask;
+    }
+
+    public class Provider : IModelBinderProvider
+    {
+        public IModelBinder? GetBinder(ModelBinderProviderContext context)
+        {
+            var type = context.Metadata.ModelType.BaseType;
+
+            if (type?.IsGenericType == true && type.GetGenericTypeDefinition() == typeof(SearchQuery<>))
+            {
+                return new BinderTypeModelBinder(typeof(SearchQueryModelBinder));
             }
+
+            return null;
         }
     }
 }

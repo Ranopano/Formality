@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using Formality.App.Common.Models;
 using Formality.App.Forms.Models;
 
-namespace Formality.App.Submissions.Models
+namespace Formality.App.Submissions.Models;
+
+public class Submission : Entity
 {
-    public class Submission : Entity
-    {
-        public DateTime CreateDateTime { get; set; } = DateTime.UtcNow;
+    public DateTime CreateDateTime { get; set; } = DateTime.UtcNow;
 
-        public int FormId { get; set; }
+    public int FormId { get; set; }
 
-        public Form Form { get; set; } = default!;
+    public Form Form { get; set; } = default!;
 
-        public ICollection<SubmissionValue> Values { get; set; } = new List<SubmissionValue>();
-    }
+    public ICollection<SubmissionValue> Values { get; set; } = new List<SubmissionValue>();
 }
